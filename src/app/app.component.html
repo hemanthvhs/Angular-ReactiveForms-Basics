@@ -1,0 +1,87 @@
+<div class="container">
+  <form [formGroup]="signupform">
+      <div class="form-group" [ngClass]="{'has-error' : formErrors.preference}">
+        <label for="preference" class="control-label">Choose Preference Type</label>
+        <div>
+          <input id="preference" type="radio" value="email" (blur)="logValidationMessagestoformErrors(signupform)" formControlName="preference">Email
+          <input id="preference" type="radio" value="phone" (blur)="logValidationMessagestoformErrors(signupform)" formControlName="preference">Phone Number
+          <span class="help-block">
+            {{formErrors.preference}}
+          </span>
+        </div>
+    </div>
+  
+    <div formGroupName="contactdetails">
+        <div class="form-group" [ngClass]="{'has-error' : formErrors.email}">
+            <label for="email" class="control-label">Email</label>
+            <input id="email" type="text" class="form-control" (blur)="logValidationMessagestoformErrors(signupform)" formControlName="email">
+            <span class="help-block">
+                {{formErrors.email}}
+              </span>
+          </div>
+
+          <div class="form-group" [ngClass]="{'has-error' : formErrors.confirmemail || formErrors.contactdetails}">
+              <label for="confirmemail" class="control-label">Confirm Email</label>
+              <input id="confirmemail" type="text" class="form-control" (blur)="logValidationMessagestoformErrors(signupform)" formControlName="confirmemail">
+              <span class="help-block">
+                  {{formErrors.confirmemail}}
+                  {{formErrors.contactdetails}}
+                </span>
+            </div>
+      
+          <div class="form-group" [ngClass]="{'has-error' : formErrors.phone}">
+            <label for="phone" class="control-label">Phone Number</label>
+            <input id="phone" type="text" class="form-control" (blur)="logValidationMessagestoformErrors(signupform)" formControlName="phone">
+            <span class="help-block">
+                {{formErrors.phone}}
+              </span>
+          </div>
+    </div>
+
+    <div class="well">
+      <button type="button" class="btn btn-primary" [disabled]="signupform.get('skilldetails').invalid" (click)="onAddSkillButtonClick()">Add Skill</button> <br><br>
+      <div formArrayName="skilldetails" *ngFor="let skill of signupform.get('skilldetails').controls ; let i=index">
+          <hr *ngIf=" i > 0">
+          <div class="form-group">
+              <input *ngIf=" i > 0" class="pull-right" type="image" src="../assets/deleteimg.png" (click)="removeFormControl(i)" alt="Delete" width="30" height="30">
+          </div>
+          <br>
+
+        <div formGroupName="{{i}}">
+            <div class="form-group" [ngClass]="{'has-error' : skill.get('skill').invalid && skill.get('skill').touched}">
+                <label attr.for="{{'skill'+i}}" class="control-label">Skill</label>             
+                <input id="{{'skill'+i}}" class="form-control" formControlName="skill">
+                <span class="help-block" *ngIf = "skill.get('skill').errors?.required && skill.get('skill').touched">
+                    Skill Name is required
+                  </span>
+              </div>
+        
+              <div class="form-group" [ngClass]="{'has-error' : skill.get('exp').invalid && skill.get('exp').touched}">
+                  <label attr.for="{{'exp'+i}}" class="control-label">Experience</label>
+                  <input id="{{'exp'+i}}" class="form-control"  formControlName="exp">
+                  <span class="help-block" *ngIf= "skill.get('exp').errors?.required && skill.controls.exp.touched">
+                      Experience is required
+                    </span>
+              </div>
+        
+              <div class="form-group" [ngClass]="{'has-error' : skill.get('proficiency').invalid && skill.get('proficiency').touched}">
+                  <label attr.for="{{'proficiency'+i}}" class="control-label">Proficiency</label>
+                  <div>
+                    <input id="{{'proficiency'+i}}" type="radio" value="beginner" formControlName="proficiency">Beginner
+                    <input id="{{'proficiency'+i}}" type="radio" value="intermediate" formControlName="proficiency">Intermediate
+                    <input id="{{'proficiency'+i}}" type="radio" value="advanced" formControlName="proficiency">Advanced
+                    <span class="help-block" *ngIf="skill.get('proficiency').errors?.required && skill.controls.proficiency.touched">
+                        Proficiency is required
+                      </span>
+                  </div>
+                </div>
+
+                
+        </div>
+
+      </div>
+    </div>
+    
+  </form>
+
+</div>
